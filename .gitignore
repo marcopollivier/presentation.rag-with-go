@@ -1,0 +1,86 @@
+# Binários
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Arquivos de teste
+*.test
+
+# Output de coverage
+*.out
+
+# Cache de módulos do Go
+# go.sum should be committed, removing this line
+
+# Dependências de vendor (se usando vendor)
+vendor/
+
+# Configurações locais
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# Dados de desenvolvimento
+data/
+storage/
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Docker
+.docker/
+docker-compose.override.yml
+.dockerignore
+
+# Kubernetes
+*.yaml.bak
+k8s-secrets/
+
+# Documentos sensíveis (evita commit acidental)
+documents/*.pdf
+documents/*.doc
+documents/*.docx
+!documents/*.txt
+!documents/.gitkeep
+
+# Configurações específicas do projeto
+config/local.yml
+config/development.yml
+
+# Binários compilados
+rag-go-app
+main
+
+# Cache
+.cache/
+.go-cache/
+
+# Air (hot reload tool) files
+tmp/
+.air.toml
+
+# Testing
+coverage.html
+coverage.xml
+.coverage/

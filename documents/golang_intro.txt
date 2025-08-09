@@ -1,0 +1,12 @@
+Go é uma linguagem de programação desenvolvida pelo Google. É conhecida por sua simplicidade, performance e excelente suporte a concorrência através de goroutines e channels.
+
+A linguagem foi criada em 2007 por Robert Griesemer, Rob Pike e Ken Thompson na Google. O objetivo era criar uma linguagem que combinasse a facilidade de programação de uma linguagem interpretada dinamicamente com a eficiência e segurança de uma linguagem compilada estaticamente.
+
+Principais características do Go:
+- Compilação rápida
+- Garbage collection eficiente
+- Sistema de tipos forte
+- Concorrência nativa
+- Sintaxe simples e limpa
+- Cross-platform
+- Excelente para desenvolvimento de microserviços e APIs

@@ -1,0 +1,136 @@
+package handlers
+
+import (
+	"net/http"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/marcopollivier/rag-go-ex01/internal/models"
+	"github.com/marcopollivier/rag-go-ex01/internal/rag"
+	"github.com/sirupsen/logrus"
+)
+
+type Handler struct {
+	ragService *rag.Service
+	logger     *logrus.Logger
+}
+
+// NewHandler cria um novo handler
+func NewHandler(ragService *rag.Service, logger *logrus.Logger) *Handler {
+	return &Handler{
+		ragService: ragService,
+		logger:     logger,
+	}
+}
+
+// Query executa uma consulta RAG
+func (h *Handler) Query(c *gin.Context) {
+	var req models.QueryRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		h.logger.WithError(err).Error("Erro ao fazer bind da requisição")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Requisição inválida: " + err.Error()})
+		return
+	}
+
+	response, err := h.ragService.Query(c.Request.Context(), req)
+	if err != nil {
+		h.logger.WithError(err).Error("Erro ao processar query")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno do servidor"})
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+// IndexDocuments indexa documentos
+func (h *Handler) IndexDocuments(c *gin.Context) {
+	var req models.IndexRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		h.logger.WithError(err).Error("Erro ao fazer bind da requisição de indexação")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Requisição inválida: " + err.Error()})
+		return
+	}
+
+	response, err := h.ragService.IndexDocuments(c.Request.Context(), req.Documents)
+	if err != nil {
+		h.logger.WithError(err).Error("Erro ao indexar documentos")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno do servidor"})
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+// IndexSampleData indexa dados de exemplo
+func (h *Handler) IndexSampleData(c *gin.Context) {
+	h.logger.Info("Indexando dados de exemplo")
+
+	response, err := h.ragService.IndexTextFiles(c.Request.Context(), "./documents")
+	if err != nil {
+		h.logger.WithError(err).Error("Erro ao indexar dados de exemplo")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno do servidor"})
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+// GetStats retorna estatísticas do sistema
+func (h *Handler) GetStats(c *gin.Context) {
+	stats, err := h.ragService.GetStats(c.Request.Context())
+	if err != nil {
+		h.logger.WithError(err).Error("Erro ao obter estatísticas")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno do servidor"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"stats": stats})
+}
+
+// Health verifica a saúde da aplicação
+func (h *Handler) Health(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"status":    "ok",
+		"service":   "rag-go-ex01",
+		"timestamp": "2025-08-09T12:00:00Z",
+	})
+}
+
+// QuickQuery permite fazer queries via query parameter para testes rápidos
+func (h *Handler) QuickQuery(c *gin.Context) {
+	query := c.Query("q")
+	if query == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Parâmetro 'q' é obrigatório"})
+		return
+	}
+
+	// Parâmetros opcionais
+	topK := 5
+	if topKStr := c.Query("top_k"); topKStr != "" {
+		if k, err := strconv.Atoi(topKStr); err == nil {
+			topK = k
+		}
+	}
+
+	threshold := float32(0.7)
+	if thresholdStr := c.Query("threshold"); thresholdStr != "" {
+		if t, err := strconv.ParseFloat(thresholdStr, 32); err == nil {
+			threshold = float32(t)
+		}
+	}
+
+	req := models.QueryRequest{
+		Query:     query,
+		TopK:      topK,
+		Threshold: threshold,
+	}
+
+	response, err := h.ragService.Query(c.Request.Context(), req)
+	if err != nil {
+		h.logger.WithError(err).Error("Erro ao processar quick query")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno do servidor"})
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}

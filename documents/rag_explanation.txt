@@ -1,0 +1,19 @@
+RAG (Retrieval Augmented Generation) é uma técnica avançada de inteligência artificial que combina busca de informações com geração de texto.
+
+O conceito funciona em duas etapas principais:
+1. Retrieval (Recuperação): Busca documentos ou trechos de texto relevantes em uma base de conhecimento
+2. Generation (Geração): Usa um modelo de linguagem para gerar uma resposta baseada no contexto recuperado
+
+Vantagens do RAG:
+- Reduz alucinações do modelo
+- Permite uso de conhecimento específico e atualizado
+- Não requer retreinamento do modelo
+- Transparência sobre as fontes de informação
+- Escalabilidade para grandes bases de conhecimento
+
+O RAG é especialmente útil para:
+- Sistemas de perguntas e respostas
+- Assistentes virtuais especializados
+- Chatbots corporativos
+- Análise de documentos
+- Suporte técnico automatizado
