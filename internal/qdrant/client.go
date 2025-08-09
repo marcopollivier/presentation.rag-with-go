@@ -239,7 +239,7 @@ func (c *Client) SearchSimilar(ctx context.Context, queryEmbedding []float32, to
 	var relevantDocs []models.RelevantDocument
 	for _, hit := range searchResponse.Result {
 		c.logger.Infof("Processando hit ID: %s, Score: %.4f", hit.ID, hit.Score)
-		
+
 		// Extrair dados do payload
 		content := ""
 		source := ""
@@ -256,7 +256,7 @@ func (c *Client) SearchSimilar(ctx context.Context, queryEmbedding []float32, to
 		} else {
 			c.logger.Warn("Content não encontrado no payload")
 		}
-		
+
 		if sourceVal, ok := hit.Payload["source"]; ok {
 			if str, ok := sourceVal.(string); ok {
 				source = str
