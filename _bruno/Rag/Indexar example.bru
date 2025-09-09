@@ -1,7 +1,7 @@
 meta {
   name: Indexar Dados de Exemplo
   type: http
-  seq: 4
+  seq: 6
 }
 
 post {
@@ -12,6 +12,10 @@ post {
 
 headers {
   Accept: application/json
+}
+
+settings {
+  encodeUrl: false
 }
 
 docs {
@@ -49,8 +53,4 @@ docs {
   - Este endpoint não requer corpo na requisição
   - Sobrescreve documentos existentes com mesmo ID
   - Útil para resetar/recarregar dados de teste
-}
-
-settings {
-  encodeUrl: false
 }

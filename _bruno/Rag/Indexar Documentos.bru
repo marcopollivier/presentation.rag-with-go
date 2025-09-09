@@ -1,7 +1,7 @@
 meta {
   name: Indexar Documentos Personalizados
   type: http
-  seq: 5
+  seq: 4
 }
 
 post {
@@ -19,27 +19,46 @@ body:json {
   {
     "documents": [
       {
-        "id": "doc_001",
-        "content": "Este é o conteúdo do primeiro documento. Ele contém informações importantes sobre desenvolvimento em Go.",
+        "id": "golang_intro_001",
+        "content": "Go é uma linguagem de programação desenvolvida pelo Google. É conhecida por sua simplicidade, performance e excelente suporte a concorrência através de goroutines e channels. A linguagem foi criada em 2007 por Robert Griesemer, Rob Pike e Ken Thompson na Google. O objetivo era criar uma linguagem que combinasse a facilidade de programação de uma linguagem interpretada dinamicamente com a eficiência e segurança de uma linguagem compilada estaticamente. Principais características do Go: Compilação rápida, Garbage collection eficiente, Sistema de tipos forte, Concorrência nativa, Sintaxe simples e limpa, Cross-platform, Excelente para desenvolvimento de microserviços e APIs.",
         "metadata": {
-          "author": "João Silva",
+          "author": "Google Team",
           "category": "Programação",
-          "tags": "go,tutorial,básico"
+          "tags": "go,golang,google,programming,concurrency",
+          "language": "pt-br",
+          "topic": "introduction"
         },
-        "source": "manual_input.txt"
+        "source": "golang_intro.txt"
       },
       {
-        "id": "doc_002", 
-        "content": "RAG (Retrieval-Augmented Generation) é uma técnica que combina recuperação de informações com geração de texto.",
+        "id": "golang_cool_002", 
+        "content": "Golang é legal demais",
         "metadata": {
-          "author": "Maria Santos",
-          "category": "IA",
-          "tags": "rag,ia,nlp"
+          "category": "Opinião",
+          "tags": "golang,cool,awesome",
+          "language": "pt-br",
+          "sentiment": "positive"
         },
-        "source": "artigo_rag.txt"
+        "source": "golang_is_cool.txt"
+      },
+      {
+        "id": "rag_explanation_003",
+        "content": "RAG (Retrieval Augmented Generation) é uma técnica avançada de inteligência artificial que combina busca de informações com geração de texto. O conceito funciona em duas etapas principais: 1. Retrieval (Recuperação): Busca documentos ou trechos de texto relevantes em uma base de conhecimento 2. Generation (Geração): Usa um modelo de linguagem para gerar uma resposta baseada no contexto recuperado. Vantagens do RAG: Reduz alucinações do modelo, Permite uso de conhecimento específico e atualizado, Não requer retreinamento do modelo, Transparência sobre as fontes de informação, Escalabilidade para grandes bases de conhecimento. O RAG é especialmente útil para: Sistemas de perguntas e respostas, Assistentes virtuais especializados, Chatbots corporativos, Análise de documentos, Suporte técnico automatizado.",
+        "metadata": {
+          "category": "IA",
+          "tags": "rag,ai,retrieval,generation,nlp,llm",
+          "language": "pt-br",
+          "topic": "artificial-intelligence",
+          "complexity": "advanced"
+        },
+        "source": "rag_explanation.txt"
       }
     ]
   }
+}
+
+settings {
+  encodeUrl: false
 }
 
 docs {
@@ -75,18 +94,26 @@ docs {
   ```json
   {
     "success": true,
-    "indexed_count": 2,
+    "indexed_count": 3,
     "failed_docs": [],
     "processing_time": "2.456s"
   }
   ```
   
+  ## Arquivos Reais do Projeto
+  Este exemplo usa os arquivos reais disponíveis na pasta `documents/`:
+  - `golang_intro.txt`: Introdução completa ao Go
+  - `golang_is_cool.txt`: Opinião simples sobre Go
+  - `rag_explanation.txt`: Explicação detalhada sobre RAG
+  
   ## Exemplo de Metadados Úteis
   - `author`: Autor do documento
-  - `category`: Categoria/tipo
+  - `category`: Categoria/tipo (Programação, IA, Opinião)
   - `tags`: Tags separadas por vírgula
-  - `language`: Idioma do conteúdo
-  - `version`: Versão do documento
+  - `language`: Idioma do conteúdo (pt-br)
+  - `topic`: Tópico principal
+  - `sentiment`: Sentimento (positive, negative, neutral)
+  - `complexity`: Nível de complexidade (basic, intermediate, advanced)
   
   ## Status Codes
   - 200: Documentos indexados com sucesso
@@ -97,8 +124,4 @@ docs {
   - Array de documentos pode conter múltiplos itens
   - Documentos com IDs existentes serão sobrescritos
   - Metadados são opcionais mas recomendados para melhor organização
-}
-
-settings {
-  encodeUrl: false
 }

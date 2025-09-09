@@ -1,7 +1,7 @@
 meta {
   name: Consulta Completa (POST)
   type: http
-  seq: 3
+  seq: 5
 }
 
 post {
@@ -21,6 +21,10 @@ body:json {
     "top_k": 3,
     "threshold": 0.7
   }
+}
+
+settings {
+  encodeUrl: false
 }
 
 docs {
@@ -70,8 +74,4 @@ docs {
   - 200: Consulta processada com sucesso
   - 400: Requisição inválida (JSON malformado ou campo obrigatório ausente)
   - 500: Erro interno do servidor
-}
-
-settings {
-  encodeUrl: false
 }

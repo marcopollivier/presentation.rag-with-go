@@ -1,7 +1,7 @@
 meta {
   name: Healthcheck
   type: http
-  seq: 1
+  seq: 2
 }
 
 get {
@@ -12,6 +12,10 @@ get {
 
 headers {
   Accept: application/json
+}
+
+settings {
+  encodeUrl: false
 }
 
 docs {
@@ -30,8 +34,4 @@ docs {
   
   ## Status Codes
   - 200: Serviço funcionando normalmente
-}
-
-settings {
-  encodeUrl: false
 }
