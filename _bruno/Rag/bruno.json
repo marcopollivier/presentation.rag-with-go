@@ -1,9 +1,13 @@
 {
   "version": "1",
-  "name": "RagGo",
+  "name": "RAG-Go API",
   "type": "collection",
   "ignore": [
     "node_modules",
     ".git"
-  ]
+  ],
+  "docs": "Coleção de endpoints para o sistema RAG (Retrieval-Augmented Generation) em Go.\n\nEsta API permite:\n- Indexar documentos (personalizados ou de exemplo)\n- Realizar consultas RAG (GET rápido ou POST completo)\n- Verificar status do serviço\n\nBase URL: http://localhost:8080/api/v1",
+  "vars": {
+    "baseUrl": "http://localhost:8080/api/v1"
+  }
 }
