@@ -63,7 +63,7 @@ docker compose ps
 docker compose up -d qdrant
 
 # 2. Execute a aplicação Go
-go run cmd/main.go
+go run main.go
 ```
 
 ### Opção 3: Usando Makefile
@@ -236,8 +236,7 @@ curl -X POST http://localhost:8080/api/v1/index \
 
 ```
 .
-├── cmd/
-│   └── main.go              # Ponto de entrada da aplicação
+├── main.go                  # Ponto de entrada da aplicação
 ├── internal/
 │   ├── handlers/            # Handlers HTTP
 │   ├── models/              # Modelos de dados
