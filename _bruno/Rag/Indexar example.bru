@@ -1,13 +1,54 @@
 meta {
-  name: Indexar example
+  name: Indexar Dados de Exemplo
   type: http
-  seq: 5
+  seq: 4
 }
 
 post {
-  url: http://localhost:8080/api/v1/index/sample
+  url: {{base_url}}/index/sample
   body: none
   auth: inherit
+}
+
+headers {
+  Accept: application/json
+}
+
+docs {
+  # Indexar Dados de Exemplo
+  
+  Indexa automaticamente os arquivos de texto da pasta `./documents` do projeto.
+  Útil para carregar dados de exemplo e testar o sistema rapidamente.
+  
+  ## Funcionamento
+  - Lê todos os arquivos `.txt` da pasta `./documents`
+  - Processa e vetoriza o conteúdo usando OpenAI
+  - Armazena os vetores no Qdrant
+  - Retorna estatísticas da indexação
+  
+  ## Arquivos indexados
+  - `documents/golang_intro.txt`
+  - `documents/rag_explanation.txt`
+  - Outros arquivos `.txt` na pasta documents
+  
+  ## Resposta Esperada
+  ```json
+  {
+    "success": true,
+    "indexed_count": 2,
+    "failed_docs": [],
+    "processing_time": "1.234s"
+  }
+  ```
+  
+  ## Status Codes
+  - 200: Indexação realizada com sucesso
+  - 500: Erro interno (problema ao acessar arquivos ou indexar)
+  
+  ## Observações
+  - Este endpoint não requer corpo na requisição
+  - Sobrescreve documentos existentes com mesmo ID
+  - Útil para resetar/recarregar dados de teste
 }
 
 settings {
