@@ -17,7 +17,7 @@ import (
 func Execute() {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
-	logger.SetLevel(logrus.InfoLevel) // Voltando para Info
+	logger.SetLevel(logrus.InfoLevel)
 
 	if err := godotenv.Load(); err != nil {
 		logger.Warn("Arquivo .env não encontrado, usando variáveis de ambiente do sistema")
