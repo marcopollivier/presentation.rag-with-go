@@ -1,0 +1,104 @@
+meta {
+  name: Indexar Documentos Personalizados
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/index
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  Accept: application/json
+}
+
+body:json {
+  {
+    "documents": [
+      {
+        "id": "doc_001",
+        "content": "Este é o conteúdo do primeiro documento. Ele contém informações importantes sobre desenvolvimento em Go.",
+        "metadata": {
+          "author": "João Silva",
+          "category": "Programação",
+          "tags": "go,tutorial,básico"
+        },
+        "source": "manual_input.txt"
+      },
+      {
+        "id": "doc_002", 
+        "content": "RAG (Retrieval-Augmented Generation) é uma técnica que combina recuperação de informações com geração de texto.",
+        "metadata": {
+          "author": "Maria Santos",
+          "category": "IA",
+          "tags": "rag,ia,nlp"
+        },
+        "source": "artigo_rag.txt"
+      }
+    ]
+  }
+}
+
+docs {
+  # Indexar Documentos Personalizados
+  
+  Permite indexar documentos personalizados fornecidos via JSON.
+  Ideal para adicionar conteúdo específico ao sistema RAG.
+  
+  ## Payload (JSON)
+  ```json
+  {
+    "documents": [
+      {
+        "id": "string (obrigatório) - ID único do documento",
+        "content": "string (obrigatório) - Conteúdo textual do documento", 
+        "metadata": {
+          "key": "value - Metadados opcionais em formato chave-valor"
+        },
+        "source": "string (obrigatório) - Fonte/origem do documento"
+      }
+    ]
+  }
+  ```
+  
+  ## Campos do Document
+  - `id`: Identificador único (string)
+  - `content`: Texto do documento (string)
+  - `metadata`: Dados adicionais (map[string]string, opcional)
+  - `source`: Origem do documento (string)
+  - `created`: Timestamp (preenchido automaticamente)
+  
+  ## Resposta Esperada
+  ```json
+  {
+    "success": true,
+    "indexed_count": 2,
+    "failed_docs": [],
+    "processing_time": "2.456s"
+  }
+  ```
+  
+  ## Exemplo de Metadados Úteis
+  - `author`: Autor do documento
+  - `category`: Categoria/tipo
+  - `tags`: Tags separadas por vírgula
+  - `language`: Idioma do conteúdo
+  - `version`: Versão do documento
+  
+  ## Status Codes
+  - 200: Documentos indexados com sucesso
+  - 400: Requisição inválida (JSON malformado ou campos obrigatórios ausentes)
+  - 500: Erro interno do servidor
+  
+  ## Observações
+  - Array de documentos pode conter múltiplos itens
+  - Documentos com IDs existentes serão sobrescritos
+  - Metadados são opcionais mas recomendados para melhor organização
+}
+
+settings {
+  encodeUrl: false
+}
