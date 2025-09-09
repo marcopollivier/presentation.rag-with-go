@@ -75,27 +75,6 @@ func (h *Handler) IndexSampleData(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// GetStats retorna estatísticas do sistema
-func (h *Handler) GetStats(c *gin.Context) {
-	stats, err := h.ragService.GetStats(c.Request.Context())
-	if err != nil {
-		h.logger.WithError(err).Error("Erro ao obter estatísticas")
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno do servidor"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"stats": stats})
-}
-
-// Health verifica a saúde da aplicação
-func (h *Handler) Health(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"status":    "ok",
-		"service":   "rag-go-ex01",
-		"timestamp": "2025-08-09T12:00:00Z",
-	})
-}
-
 // QuickQuery permite fazer queries via query parameter para testes rápidos
 func (h *Handler) QuickQuery(c *gin.Context) {
 	query := c.Query("q")

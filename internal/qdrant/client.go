@@ -335,29 +335,3 @@ func (c *Client) DeleteDocument(ctx context.Context, docID string) error {
 	c.logger.Debugf("Documento %s removido com sucesso", docID)
 	return nil
 }
-
-// GetCollectionInfo retorna informações sobre a coleção
-func (c *Client) GetCollectionInfo(ctx context.Context) (map[string]interface{}, error) {
-	url := fmt.Sprintf("%s/collections/%s", c.baseURL, c.collectionName)
-	resp, err := c.httpClient.Get(url)
-	if err != nil {
-		return nil, fmt.Errorf("erro ao obter informações da coleção: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("erro ao obter informações da coleção: status %d", resp.StatusCode)
-	}
-
-	var response CollectionInfoResponse
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return nil, fmt.Errorf("erro ao decodificar resposta: %w", err)
-	}
-
-	return map[string]interface{}{
-		"points_count": response.Result.PointsCount,
-		"status":       response.Result.Status,
-		"vector_size":  response.Result.Config.Params.Vectors.Size,
-		"distance":     response.Result.Config.Params.Vectors.Distance,
-	}, nil
-}

@@ -216,15 +216,3 @@ func (s *Service) createSampleDocuments() []models.Document {
 		},
 	}
 }
-
-// GetStats retorna estatísticas do sistema RAG
-func (s *Service) GetStats(ctx context.Context) (map[string]interface{}, error) {
-	s.logger.Debug("Obtendo estatísticas do sistema")
-
-	collectionInfo, err := s.qdrantClient.GetCollectionInfo(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("erro ao obter informações da coleção: %w", err)
-	}
-
-	return collectionInfo, nil
-}
