@@ -1,0 +1,19 @@
+meta {
+  name: Consulta rapida
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:8080/api/v1/query?q=O%20que%20é%20Go?
+  body: none
+  auth: inherit
+}
+
+params:query {
+  q: O%20que%20é%20Go?
+}
+
+settings {
+  encodeUrl: false
+}
