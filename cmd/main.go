@@ -108,22 +108,6 @@ func main() {
 		api.GET("/query", handler.QuickQuery) // Query via GET para testes
 	}
 
-	// Rota raiz
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "RAG Go API - Retrieval Augmented Generation",
-			"version": "1.0.0",
-			"endpoints": gin.H{
-				"health":       "GET /api/v1/health",
-				"stats":        "GET /api/v1/stats",
-				"quick_query":  "GET /api/v1/query?q=sua_pergunta",
-				"query":        "POST /api/v1/query",
-				"index":        "POST /api/v1/index",
-				"index_sample": "POST /api/v1/index/sample",
-			},
-		})
-	})
-
 	// Iniciar servidor
 	port := os.Getenv("PORT")
 	if port == "" {
