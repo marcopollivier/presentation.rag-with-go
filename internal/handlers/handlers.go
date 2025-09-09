@@ -105,14 +105,14 @@ func (h *Handler) QuickQuery(c *gin.Context) {
 	}
 
 	// Parâmetros opcionais
-	topK := 5
+	topK := 5 // O número máximo de documentos relevantes que devem ser retornados
 	if topKStr := c.Query("top_k"); topKStr != "" {
 		if k, err := strconv.Atoi(topKStr); err == nil {
 			topK = k
 		}
 	}
 
-	threshold := float32(0.7)
+	threshold := float32(0.7) // O score mínimo de similaridade que um documento deve ter para ser considerado relevante
 	if thresholdStr := c.Query("threshold"); thresholdStr != "" {
 		if t, err := strconv.ParseFloat(thresholdStr, 32); err == nil {
 			threshold = float32(t)

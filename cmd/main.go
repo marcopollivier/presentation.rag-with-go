@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -46,6 +48,25 @@ func main() {
 		log.Fatalf("Erro ao inicializar cliente Qdrant: %v", err)
 	}
 
+	// Aguardar Qdrant estar pronto
+	logger.Info("Aguardando Qdrant ficar disponível...")
+	for i := 0; i < 30; i++ {
+		resp, err := http.Get("http://localhost:6333/")
+		if err == nil && resp.StatusCode == 200 {
+			resp.Body.Close()
+			logger.Info("Qdrant está disponível!")
+			break
+		}
+		if resp != nil {
+			resp.Body.Close()
+		}
+		if i == 29 {
+			log.Fatalf("Timeout aguardando Qdrant ficar disponível")
+		}
+		logger.Warnf("Tentativa %d/30: Qdrant não disponível, aguardando...", i+1)
+		time.Sleep(2 * time.Second)
+	}
+
 	// Inicializar serviços
 	logger.Info("Inicializando serviço RAG...")
 	ragService := rag.NewService(openaiClient, qdrantClient, logger)
@@ -79,10 +100,12 @@ func main() {
 	{
 		api.GET("/health", handler.Health)
 		api.GET("/stats", handler.GetStats)
-		api.GET("/query", handler.QuickQuery)              // Query via GET para testes
-		api.POST("/query", handler.Query)                  // Query principal
+
 		api.POST("/index", handler.IndexDocuments)         // Indexar documentos
 		api.POST("/index/sample", handler.IndexSampleData) // Indexar dados de exemplo
+
+		api.POST("/query", handler.Query)     // Query principal
+		api.GET("/query", handler.QuickQuery) // Query via GET para testes
 	}
 
 	// Rota raiz

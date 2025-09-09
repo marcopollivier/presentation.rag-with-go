@@ -4,7 +4,7 @@
 
 # Variáveis
 BINARY_NAME=rag-go-app
-DOCKER_COMPOSE=docker-compose
+DOCKER_COMPOSE=docker compose
 
 help: ## Mostra esta ajuda
 	@echo "RAG Go - Comandos Disponíveis:"
@@ -49,6 +49,9 @@ docker-up: ## Inicia todos os serviços com Docker
 docker-down: ## Para todos os serviços Docker
 	@echo "⏹️  Parando serviços..."
 	@$(DOCKER_COMPOSE) down
+
+docker-restart: docker-down docker-up ## Reinicia todos os serviços Docker
+	@echo "🔄 Reiniciando serviços..."
 
 docker-logs: ## Mostra logs dos containers
 	@echo "📋 Logs dos containers:"

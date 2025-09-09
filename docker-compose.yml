@@ -13,44 +13,45 @@ services:
     environment:
       - QDRANT__SERVICE__HTTP_PORT=6333
       - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__WEB_UI__ENABLED=true
     networks:
       - rag-network
 
   # LangFlow para UI de fluxos
-  langflow:
-    image: langflowai/langflow:latest
-    container_name: rag-langflow
-    ports:
-      - "7860:7860"
-    environment:
-      - LANGFLOW_DATABASE_URL=sqlite:///app/langflow.db
-      - LANGFLOW_AUTO_LOGIN=false
-    volumes:
-      - langflow_data:/app/langflow
-    networks:
-      - rag-network
-    depends_on:
-      - qdrant
+  # langflow:
+  #   image: langflowai/langflow:latest
+  #   container_name: rag-langflow
+  #   ports:
+  #     - "7860:7860"
+  #   environment:
+  #     - LANGFLOW_DATABASE_URL=sqlite:///app/langflow.db
+  #     - LANGFLOW_AUTO_LOGIN=false
+  #   volumes:
+  #     - langflow_data:/app/langflow
+  #   networks:
+  #     - rag-network
+  #   depends_on:
+  #     - qdrant
 
   # Nossa aplicação Go RAG
-  rag-go-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: rag-go-app
-    ports:
-      - "8080:8080"
-    environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - QDRANT_URL=http://qdrant:6333
-      - GIN_MODE=release
-    networks:
-      - rag-network
-    depends_on:
-      - qdrant
-      - langflow
-    volumes:
-      - ./documents:/app/documents
+  # rag-go-app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: rag-go-app
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - OPENAI_API_KEY=${OPENAI_API_KEY}
+  #     - QDRANT_URL=http://qdrant:6333
+  #     - GIN_MODE=release
+  #   networks:
+  #     - rag-network
+  #   depends_on:
+  #     - qdrant
+  #     - langflow
+  #   volumes:
+  #     - ./documents:/app/documents
 
 volumes:
   qdrant_storage:
