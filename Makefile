@@ -17,12 +17,18 @@ build: clean deps
 docker-up:
 	@docker compose up -d
 
+docker-up-e:
+	@docker compose up
+
 docker-down:
 	@docker compose down
 
 # Podman
 podman-up:
 	@podman-compose up -d
+
+podman-up-e:
+	@podman-compose up
 
 podman-down:
 	@podman-compose down
