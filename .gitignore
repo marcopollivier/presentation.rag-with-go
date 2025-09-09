@@ -57,13 +57,6 @@ docker-compose.override.yml
 *.yaml.bak
 k8s-secrets/
 
-# Documentos sensíveis (evita commit acidental)
-documents/*.pdf
-documents/*.doc
-documents/*.docx
-!documents/*.txt
-!documents/.gitkeep
-
 # Configurações específicas do projeto
 config/local.yml
 config/development.yml
