@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Qdrant Vector Database
+
   qdrant:
     image: qdrant/qdrant:latest
     container_name: rag-qdrant
@@ -32,26 +32,6 @@ services:
   #     - rag-network
   #   depends_on:
   #     - qdrant
-
-  # Nossa aplicação Go RAG
-  # rag-go-app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   container_name: rag-go-app
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - OPENAI_API_KEY=${OPENAI_API_KEY}
-  #     - QDRANT_URL=http://qdrant:6333
-  #     - GIN_MODE=release
-  #   networks:
-  #     - rag-network
-  #   depends_on:
-  #     - qdrant
-  #     - langflow
-  #   volumes:
-  #     - ./documents:/app/documents
 
 volumes:
   qdrant_storage:
