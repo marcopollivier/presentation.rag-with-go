@@ -31,7 +31,6 @@ data/
 storage/
 
 # IDEs e editores
-.vscode/
 .idea/
 *.swp
 *.swo
