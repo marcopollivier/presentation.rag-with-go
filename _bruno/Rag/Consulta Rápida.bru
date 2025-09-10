@@ -1,0 +1,64 @@
+meta {
+  name: Consulta Rápida
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/query?q=o que é go?
+  body: none
+  auth: inherit
+}
+
+params:query {
+  q: o que é go?
+}
+
+headers {
+  Accept: application/json
+}
+
+settings {
+  encodeUrl: false
+}
+
+docs {
+  # Consulta Rápida via GET
+  
+  Permite fazer consultas RAG de forma rápida usando query parameters.
+  Ideal para testes e integrações simples.
+  
+  ## Query Parameters
+  - `q` (obrigatório): A pergunta/consulta a ser feita
+  - `top_k` (opcional): Número máximo de documentos relevantes (default: 5)
+  - `threshold` (opcional): Score mínimo de similaridade (default: 0.7)
+  
+  ## Exemplos de uso:
+  - Consulta simples: `?q=O que é Go?`
+  - Com parâmetros: `?q=Como usar RAG?&top_k=3&threshold=0.8`
+  
+  ## Resposta Esperada
+  ```json
+  {
+    "answer": "Resposta gerada pela IA baseada nos documentos relevantes",
+    "relevant_docs": [
+      {
+        "document": {
+          "id": "doc_id",
+          "content": "Conteúdo do documento...",
+          "metadata": {},
+          "source": "fonte.txt",
+          "created": "2025-09-09T10:00:00Z"
+        },
+        "score": 0.95
+      }
+    ],
+    "processing_time_ms": 1500
+  }
+  ```
+  
+  ## Status Codes
+  - 200: Consulta processada com sucesso
+  - 400: Parâmetro 'q' é obrigatório
+  - 500: Erro interno do servidor
+}
