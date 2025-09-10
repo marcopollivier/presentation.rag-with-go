@@ -53,29 +53,40 @@ func (c *Client) GenerateAnswer(ctx context.Context, query string, docs []models
 
 	// Construir contexto a partir dos documentos relevantes
 	var contextParts []string
+	hasRelevantDocs := false
+
 	for i, doc := range docs {
-		contextParts = append(contextParts, fmt.Sprintf("Documento %d (Score: %.2f):\n%s",
-			i+1, doc.Score, doc.Document.Content))
+		if doc.Score >= 0.75 {
+			hasRelevantDocs = true
+			contextParts = append(contextParts, fmt.Sprintf("Documento %d (Score: %.2f):\n%s",
+				i+1, doc.Score, doc.Document.Content))
+		}
 	}
 
-	context := strings.Join(contextParts, "\n\n")
-
-	// Prompt para o modelo
-	systemPrompt := `Você é um assistente especializado em responder perguntas baseado exclusivamente no contexto fornecido.
-
-INSTRUÇÕES:
-1. Use APENAS as informações do contexto fornecido para responder
-2. Se a resposta não estiver no contexto, diga claramente que não tem informações suficientes
-3. Seja preciso e cite as partes relevantes do contexto
-4. Responda em português brasileiro
-5. Seja conciso mas completo`
-
-	userPrompt := fmt.Sprintf(`CONTEXTO:
+	var userPrompt string
+	if hasRelevantDocs {
+		context := strings.Join(contextParts, "\n\n")
+		userPrompt = fmt.Sprintf(`CONTEXTO RELEVANTE:
 %s
 
 PERGUNTA: %s
 
-RESPOSTA:`, context, query)
+RESPOSTA (baseada no contexto):`, context, query)
+	} else {
+		userPrompt = fmt.Sprintf(`PERGUNTA: %s
+
+Responda de forma direta e objetiva, sem mencionar fontes ou falta de informações:`, query)
+	}
+
+	systemPrompt := `Você é um assistente inteligente que responde perguntas de forma útil e objetiva.
+
+INSTRUÇÕES:
+1. Responda de forma direta e objetiva, sem mencionar fontes ou contexto
+2. Use informações do contexto quando fornecidas e relevantes
+3. Use conhecimento geral quando o contexto não for relevante para a pergunta
+4. Responda em português brasileiro
+5. Seja preciso, útil e completo
+6. Vá direto ao ponto, sem preâmbulos ou explicações sobre as fontes de informação`
 
 	req := openai.ChatCompletionRequest{
 		Model: c.model,
