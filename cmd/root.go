@@ -59,6 +59,11 @@ func Execute() {
 
 		api.POST("/query", handler.Query)     // Query principal
 		api.GET("/query", handler.QuickQuery) // Query via GET para testes
+
+		// Novas rotas para explorar documentos
+		api.GET("/documents", handler.GetAllDocuments)                     // Listar todos os documentos
+		api.GET("/documents/source/:source", handler.GetDocumentsBySource) // Documentos por fonte
+		api.GET("/collection/info", handler.GetCollectionInfo)             // Informações da coleção
 	}
 
 	if err := router.Run(":8080"); err != nil {

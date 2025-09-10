@@ -335,3 +335,185 @@ func (c *Client) DeleteDocument(ctx context.Context, docID string) error {
 	c.logger.Debugf("Documento %s removido com sucesso", docID)
 	return nil
 }
+
+// ScrollRequest representa uma requisição de scroll
+type ScrollRequest struct {
+	Limit       int                    `json:"limit"`
+	WithPayload bool                   `json:"with_payload"`
+	WithVector  bool                   `json:"with_vector"`
+	Offset      *string                `json:"offset,omitempty"`
+	Filter      map[string]interface{} `json:"filter,omitempty"`
+}
+
+// ScrollResponse representa a resposta de um scroll
+type ScrollResponse struct {
+	Result struct {
+		Points         []PointStruct `json:"points"`
+		NextPageOffset *string       `json:"next_page_offset"`
+	} `json:"result"`
+}
+
+// GetAllDocuments retorna todos os documentos da coleção usando scroll
+func (c *Client) GetAllDocuments(ctx context.Context, limit int) ([]models.Document, error) {
+	c.logger.Infof("Buscando todos os documentos da coleção '%s'", c.collectionName)
+
+	scrollReq := ScrollRequest{
+		Limit:       limit,
+		WithPayload: true,
+		WithVector:  false,
+	}
+
+	jsonData, err := json.Marshal(scrollReq)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao serializar scroll: %w", err)
+	}
+
+	url := fmt.Sprintf("%s/collections/%s/points/scroll", c.baseURL, c.collectionName)
+	resp, err := c.httpClient.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("erro ao fazer scroll: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("erro no scroll: status %d, body: %s", resp.StatusCode, string(body))
+	}
+
+	var scrollResponse ScrollResponse
+	if err := json.NewDecoder(resp.Body).Decode(&scrollResponse); err != nil {
+		return nil, fmt.Errorf("erro ao decodificar resposta: %w", err)
+	}
+
+	var documents []models.Document
+	for _, point := range scrollResponse.Result.Points {
+		doc := c.pointToDocument(point)
+		documents = append(documents, doc)
+	}
+
+	c.logger.Infof("Encontrados %d documentos na coleção", len(documents))
+	return documents, nil
+}
+
+// GetDocumentsBySource busca documentos por fonte específica
+func (c *Client) GetDocumentsBySource(ctx context.Context, source string, limit int) ([]models.Document, error) {
+	c.logger.Infof("Buscando documentos da fonte '%s'", source)
+
+	scrollReq := ScrollRequest{
+		Limit:       limit,
+		WithPayload: true,
+		WithVector:  false,
+		Filter: map[string]interface{}{
+			"must": []map[string]interface{}{
+				{
+					"key": "source",
+					"match": map[string]interface{}{
+						"value": source,
+					},
+				},
+			},
+		},
+	}
+
+	jsonData, err := json.Marshal(scrollReq)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao serializar scroll: %w", err)
+	}
+
+	url := fmt.Sprintf("%s/collections/%s/points/scroll", c.baseURL, c.collectionName)
+	resp, err := c.httpClient.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("erro ao fazer scroll: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("erro no scroll: status %d, body: %s", resp.StatusCode, string(body))
+	}
+
+	var scrollResponse ScrollResponse
+	if err := json.NewDecoder(resp.Body).Decode(&scrollResponse); err != nil {
+		return nil, fmt.Errorf("erro ao decodificar resposta: %w", err)
+	}
+
+	var documents []models.Document
+	for _, point := range scrollResponse.Result.Points {
+		doc := c.pointToDocument(point)
+		documents = append(documents, doc)
+	}
+
+	c.logger.Infof("Encontrados %d documentos da fonte '%s'", len(documents), source)
+	return documents, nil
+}
+
+// GetCollectionInfo retorna informações sobre a coleção
+func (c *Client) GetCollectionInfo(ctx context.Context) (*CollectionInfoResponse, error) {
+	c.logger.Info("Obtendo informações da coleção")
+
+	url := fmt.Sprintf("%s/collections/%s", c.baseURL, c.collectionName)
+	resp, err := c.httpClient.Get(url)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao obter info da coleção: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("erro ao obter info: status %d, body: %s", resp.StatusCode, string(body))
+	}
+
+	var collectionInfo CollectionInfoResponse
+	if err := json.NewDecoder(resp.Body).Decode(&collectionInfo); err != nil {
+		return nil, fmt.Errorf("erro ao decodificar resposta: %w", err)
+	}
+
+	c.logger.Infof("Coleção '%s' tem %d pontos", c.collectionName, collectionInfo.Result.PointsCount)
+	return &collectionInfo, nil
+}
+
+// pointToDocument converte um PointStruct em Document
+func (c *Client) pointToDocument(point PointStruct) models.Document {
+	content := ""
+	source := ""
+	created := time.Time{}
+	metadata := make(map[string]string)
+
+	if contentVal, ok := point.Payload["content"]; ok {
+		if str, ok := contentVal.(string); ok {
+			content = str
+		}
+	}
+
+	if sourceVal, ok := point.Payload["source"]; ok {
+		if str, ok := sourceVal.(string); ok {
+			source = str
+		}
+	}
+
+	if createdVal, ok := point.Payload["created"]; ok {
+		if str, ok := createdVal.(string); ok {
+			if t, err := time.Parse("2006-01-02T15:04:05Z", str); err == nil {
+				created = t
+			}
+		}
+	}
+
+	// Extrair metadata
+	for key, value := range point.Payload {
+		if len(key) > 9 && key[:9] == "metadata_" {
+			metaKey := key[9:]
+			if str, ok := value.(string); ok {
+				metadata[metaKey] = str
+			}
+		}
+	}
+
+	return models.Document{
+		ID:       point.ID,
+		Content:  content,
+		Source:   source,
+		Metadata: metadata,
+		Created:  created,
+	}
+}

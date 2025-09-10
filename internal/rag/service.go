@@ -88,21 +88,18 @@ func (s *Service) Query(ctx context.Context, req models.QueryRequest) (*models.Q
 		req.Threshold = 0.7
 	}
 
-	// Gerar embedding da query
 	queryEmbedding, err := s.openaiClient.GenerateEmbedding(ctx, req.Query)
 	if err != nil {
 		s.logger.WithError(err).Error("Erro ao gerar embedding da query")
 		return nil, fmt.Errorf("erro ao gerar embedding da query: %w", err)
 	}
 
-	// Buscar documentos similares
 	relevantDocs, err := s.qdrantClient.SearchSimilar(ctx, queryEmbedding, req.TopK, req.Threshold)
 	if err != nil {
 		s.logger.WithError(err).Error("Erro ao buscar documentos similares")
 		return nil, fmt.Errorf("erro ao buscar documentos similares: %w", err)
 	}
 
-	// Gerar resposta usando OpenAI
 	answer, err := s.openaiClient.GenerateAnswer(ctx, req.Query, relevantDocs)
 	if err != nil {
 		s.logger.WithError(err).Error("Erro ao gerar resposta")
@@ -126,11 +123,8 @@ func (s *Service) IndexTextFiles(ctx context.Context, folderPath string) (*model
 
 	var documents []models.Document
 
-	// Verificar se a pasta existe
 	if _, err := os.Stat(folderPath); os.IsNotExist(err) {
 		s.logger.Warnf("Pasta %s não existe, criando documentos de exemplo", folderPath)
-		// Se a pasta não existir, criar documentos de exemplo para demo
-		documents = s.createSampleDocuments()
 	} else {
 		// Ler arquivos da pasta
 		files, err := ioutil.ReadDir(folderPath)
@@ -172,47 +166,25 @@ func (s *Service) IndexTextFiles(ctx context.Context, folderPath string) (*model
 			s.logger.Infof("Arquivo %s lido com %d caracteres", file.Name(), len(content))
 		}
 
-		if len(documents) == 0 {
-			s.logger.Warn("Nenhum arquivo .txt encontrado, criando documentos de exemplo")
-			documents = s.createSampleDocuments()
-		}
 	}
 
 	return s.IndexDocuments(ctx, documents)
 }
 
-// createSampleDocuments cria documentos de exemplo para demo
-func (s *Service) createSampleDocuments() []models.Document {
-	return []models.Document{
-		{
-			ID:      uuid.New().String(),
-			Content: "Go é uma linguagem de programação desenvolvida pelo Google. É conhecida por sua simplicidade, performance e excelente suporte a concorrência através de goroutines e channels. A linguagem foi criada em 2007 por Robert Griesemer, Rob Pike e Ken Thompson na Google. O objetivo era criar uma linguagem que combinasse a facilidade de programação de uma linguagem interpretada dinamicamente com a eficiência e segurança de uma linguagem compilada estaticamente. Principais características do Go: compilação rápida, garbage collection eficiente, sistema de tipos forte, concorrência nativa, sintaxe simples e limpa, cross-platform, excelente para desenvolvimento de microserviços e APIs.",
-			Source:  "golang_intro.txt",
-			Metadata: map[string]string{
-				"category": "programming",
-				"language": "portuguese",
-			},
-			Created: time.Now(),
-		},
-		{
-			ID:      uuid.New().String(),
-			Content: "RAG (Retrieval Augmented Generation) é uma técnica avançada de inteligência artificial que combina busca de informações com geração de texto. O conceito funciona em duas etapas principais: 1. Retrieval (Recuperação): Busca documentos ou trechos de texto relevantes em uma base de conhecimento 2. Generation (Geração): Usa um modelo de linguagem para gerar uma resposta baseada no contexto recuperado. Vantagens do RAG: reduz alucinações do modelo, permite uso de conhecimento específico e atualizado, não requer retreinamento do modelo, transparência sobre as fontes de informação, escalabilidade para grandes bases de conhecimento. O RAG é especialmente útil para: sistemas de perguntas e respostas, assistentes virtuais especializados, chatbots corporativos, análise de documentos, suporte técnico automatizado.",
-			Source:  "rag_explanation.txt",
-			Metadata: map[string]string{
-				"category": "ai",
-				"language": "portuguese",
-			},
-			Created: time.Now(),
-		},
-		{
-			ID:      uuid.New().String(),
-			Content: "Qdrant é um banco de dados vetorial de código aberto, otimizado para aplicações de machine learning e busca semântica. Oferece APIs RESTful e gRPC para operações de inserção, busca e filtragem de vetores. Suporta filtros avançados, clustering de vetores, e indexação eficiente usando algoritmo HNSW. É ideal para aplicações de recomendação, busca semântica, detecção de similaridade e sistemas RAG. Qdrant pode ser executado como um serviço standalone ou integrado em aplicações através de suas bibliotecas cliente.",
-			Source:  "qdrant_info.txt",
-			Metadata: map[string]string{
-				"category": "database",
-				"language": "portuguese",
-			},
-			Created: time.Now(),
-		},
-	}
+// GetAllDocuments retorna todos os documentos indexados
+func (s *Service) GetAllDocuments(ctx context.Context, limit int) ([]models.Document, error) {
+	s.logger.Infof("Buscando todos os documentos (limite: %d)", limit)
+	return s.qdrantClient.GetAllDocuments(ctx, limit)
+}
+
+// GetDocumentsBySource retorna documentos filtrados por fonte
+func (s *Service) GetDocumentsBySource(ctx context.Context, source string, limit int) ([]models.Document, error) {
+	s.logger.Infof("Buscando documentos da fonte '%s' (limite: %d)", source, limit)
+	return s.qdrantClient.GetDocumentsBySource(ctx, source, limit)
+}
+
+// GetCollectionInfo retorna informações sobre a coleção
+func (s *Service) GetCollectionInfo(ctx context.Context) (*qdrant.CollectionInfoResponse, error) {
+	s.logger.Info("Obtendo informações da coleção")
+	return s.qdrantClient.GetCollectionInfo(ctx)
 }

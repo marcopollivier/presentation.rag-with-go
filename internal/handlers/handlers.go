@@ -113,3 +113,74 @@ func (h *Handler) QuickQuery(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+// GetAllDocuments retorna todos os documentos indexados
+func (h *Handler) GetAllDocuments(c *gin.Context) {
+	h.logger.Info("Buscando todos os documentos")
+
+	// Parâmetro opcional para limite
+	limit := 100
+	if limitStr := c.Query("limit"); limitStr != "" {
+		if l, err := strconv.Atoi(limitStr); err == nil {
+			limit = l
+		}
+	}
+
+	documents, err := h.ragService.GetAllDocuments(c.Request.Context(), limit)
+	if err != nil {
+		h.logger.WithError(err).Error("Erro ao buscar todos os documentos")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno do servidor"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"documents": documents,
+		"count":     len(documents),
+	})
+}
+
+// GetDocumentsBySource retorna documentos filtrados por fonte
+func (h *Handler) GetDocumentsBySource(c *gin.Context) {
+	source := c.Param("source")
+	if source == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Parâmetro 'source' é obrigatório"})
+		return
+	}
+
+	h.logger.Infof("Buscando documentos da fonte: %s", source)
+
+	// Parâmetro opcional para limite
+	limit := 100
+	if limitStr := c.Query("limit"); limitStr != "" {
+		if l, err := strconv.Atoi(limitStr); err == nil {
+			limit = l
+		}
+	}
+
+	documents, err := h.ragService.GetDocumentsBySource(c.Request.Context(), source, limit)
+	if err != nil {
+		h.logger.WithError(err).Error("Erro ao buscar documentos por fonte")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno do servidor"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"source":    source,
+		"documents": documents,
+		"count":     len(documents),
+	})
+}
+
+// GetCollectionInfo retorna informações sobre a coleção Qdrant
+func (h *Handler) GetCollectionInfo(c *gin.Context) {
+	h.logger.Info("Obtendo informações da coleção")
+
+	info, err := h.ragService.GetCollectionInfo(c.Request.Context())
+	if err != nil {
+		h.logger.WithError(err).Error("Erro ao obter informações da coleção")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno do servidor"})
+		return
+	}
+
+	c.JSON(http.StatusOK, info)
+}
