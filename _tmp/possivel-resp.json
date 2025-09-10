@@ -1,0 +1,48 @@
+{
+  "answer": "Go é uma linguagem de programação desenvolvida pelo Google conhecida por sua simplicidade, performance e excelente suporte a concorrência através de goroutines e channels. Foi criada em 2007 por Robert Griesemer, Rob Pike e Ken Thompson com o objetivo de combinar a facilidade de programação de uma linguagem interpretada dinamicamente com a eficiência e segurança de uma linguagem compilada estaticamente.",
+  "relevant_docs": [
+    {
+      "document": {
+        "id": "9342f6ea-9ed6-476c-928b-c370804e9223",
+        "content": "Go é uma linguagem de programação desenvolvida pelo Google. É conhecida por sua simplicidade, performance e excelente suporte a concorrência através de goroutines e channels.\n\nA linguagem foi criada em 2007 por Robert Griesemer, Rob Pike e Ken Thompson na Google. O objetivo era criar uma linguagem que combinasse a facilidade de programação de uma linguagem interpretada dinamicamente com a eficiência e segurança de uma linguagem compilada estaticamente.\n\nPrincipais características do Go:\n- Compilação rápida\n- Garbage collection eficiente\n- Sistema de tipos forte\n- Concorrência nativa\n- Sintaxe simples e limpa\n- Cross-platform\n- Excelente para desenvolvimento de microserviços e APIs\n",
+        "metadata": {
+          "file_path": "documents/golang_intro.txt",
+          "file_size": "706",
+          "language": "portuguese"
+        },
+        "source": "golang_intro.txt",
+        "created": "2025-09-09T19:48:05Z"
+      },
+      "score": 0.8657179
+    },
+    {
+      "document": {
+        "id": "a4124a2c-e2bf-4845-838e-f9c31b342c20",
+        "content": "Golang é legal demais",
+        "metadata": {
+          "file_path": "documents/golang_is_cool.txt",
+          "file_size": "22",
+          "language": "portuguese"
+        },
+        "source": "golang_is_cool.txt",
+        "created": "2025-09-09T19:48:05Z"
+      },
+      "score": 0.8497912
+    },
+    {
+      "document": {
+        "id": "18074acf-51ac-44df-9774-6d28474623a6",
+        "content": "RAG (Retrieval Augmented Generation) é uma técnica avançada de inteligência artificial que combina busca de informações com geração de texto.\n\nO conceito funciona em duas etapas principais:\n1. Retrieval (Recuperação): Busca documentos ou trechos de texto relevantes em uma base de conhecimento\n2. Generation (Geração): Usa um modelo de linguagem para gerar uma resposta baseada no contexto recuperado\n\nVantagens do RAG:\n- Reduz alucinações do modelo\n- Permite uso de conhecimento específico e atualizado\n- Não requer retreinamento do modelo\n- Transparência sobre as fontes de informação\n- Escalabilidade para grandes bases de conhecimento\n\nO RAG é especialmente útil para:\n- Sistemas de perguntas e respostas\n- Assistentes virtuais especializados\n- Chatbots corporativos\n- Análise de documentos\n- Suporte técnico automatizado\n",
+        "metadata": {
+          "file_path": "documents/rag_explanation.txt",
+          "file_size": "849",
+          "language": "portuguese"
+        },
+        "source": "rag_explanation.txt",
+        "created": "2025-09-09T19:48:05Z"
+      },
+      "score": 0.7746501
+    }
+  ],
+  "processing_time_ms": 3556
+}

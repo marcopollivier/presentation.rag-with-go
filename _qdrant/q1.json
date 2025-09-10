@@ -1,0 +1,14 @@
+{
+  "limit": 20,
+  "with_payload": true,
+  "filter": {
+    "must": [
+      {
+        "key": "source",
+        "match": {
+          "value": "golang_intro.txt"
+        }
+      }
+    ]
+  }
+}

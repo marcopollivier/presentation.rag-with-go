@@ -1,0 +1,62 @@
+{
+  "answer": "O brigadeiro é um doce tradicional brasileiro feito com leite condensado, margarina, chocolate em pó e chocolate granulado. A receita inclui instruções detalhadas de preparo, dicas importantes e variações, sendo uma opção popular em festas e comemorações.",
+  "relevant_docs": [
+    {
+      "document": {
+        "id": "a2756a00-b533-480d-8d86-993dc5a46ee2",
+        "content": "RECEITA DE BRIGADEIRO TRADICIONAL\n\nO brigadeiro é um dos doces mais queridos e tradicionais do Brasil. Criado na década de 1940, tornou-se um clássico presente em festas de aniversário, casamentos e comemorações em geral.\n\nINGREDIENTES:\n- 1 lata de leite condensado (395g)\n- 1 colher de sopa de margarina ou manteiga\n- 3 colheres de sopa de chocolate em pó\n- Chocolate granulado para enrolar\n\nMODO DE PREPARO:\n\n1. Em uma panela antiaderente, coloque o leite condensado, a margarina e o chocolate em pó.\n\n2. Leve ao fogo baixo e mexa constantemente com uma colher de pau até que a mistura comece a desgrudar do fundo da panela.\n\n3. O ponto ideal é quando você consegue passar a colher no fundo da panela e a mistura demora um pouco para voltar ao lugar.\n\n4. Retire do fogo e deixe esfriar completamente.\n\n5. Com as mãos untadas com manteiga, pegue pequenas porções da massa e faça bolinhas.\n\n6. Passe as bolinhas no chocolate granulado até ficarem completamente cobertas.\n\n7. Coloque em forminhas de papel e sirva.\n\nDICAS IMPORTANTES:\n\n- Nunca pare de mexer durante o cozimento para evitar que queime\n- O fogo deve ser sempre baixo ou médio-baixo\n- O tempo de cozimento varia entre 10 a 15 minutos\n- A massa está no ponto quando você consegue ver o fundo da panela ao mexer\n- Deixe esfriar bem antes de enrolar para facilitar o manuseio\n- Mantenha as mãos sempre untadas com manteiga ao fazer as bolinhas\n\nVARIAÇÕES:\n\n- Brigadeiro de chocolate meio amargo: substitua o chocolate em pó por cacau em pó\n- Brigadeiro branco: use leite condensado, manteiga e leite em pó\n- Brigadeiro de café: adicione 1 colher de café solúvel\n- Brigadeiro de coco: substitua o chocolate granulado por coco ralado\n\nRENDIMENTO: Aproximadamente 25 brigadeiros\nTEMPO DE PREPARO: 30 minutos (incluindo o tempo de resfriamento)\n\nO brigadeiro é perfeito para qualquer ocasião e sempre faz sucesso entre crianças e adultos!",
+        "metadata": {
+          "file_path": "documents/receita_brigadeiro.txt",
+          "file_size": "1925",
+          "language": "portuguese"
+        },
+        "source": "receita_brigadeiro.txt",
+        "created": "2025-09-09T18:09:41Z"
+      },
+      "score": 0.8613945
+    },
+    {
+      "document": {
+        "id": "8d973134-bc9a-4917-8652-707cd43eeed1",
+        "content": "Golang é legal demais",
+        "metadata": {
+          "file_path": "documents/golang_is_cool.txt",
+          "file_size": "22",
+          "language": "portuguese"
+        },
+        "source": "golang_is_cool.txt",
+        "created": "2025-09-09T18:09:41Z"
+      },
+      "score": 0.75764596
+    },
+    {
+      "document": {
+        "id": "f1a7ce82-0e7b-4a36-9882-ca01c8d667e2",
+        "content": "Go é uma linguagem de programação desenvolvida pelo Google. É conhecida por sua simplicidade, performance e excelente suporte a concorrência através de goroutines e channels.\n\nA linguagem foi criada em 2007 por Robert Griesemer, Rob Pike e Ken Thompson na Google. O objetivo era criar uma linguagem que combinasse a facilidade de programação de uma linguagem interpretada dinamicamente com a eficiência e segurança de uma linguagem compilada estaticamente.\n\nPrincipais características do Go:\n- Compilação rápida\n- Garbage collection eficiente\n- Sistema de tipos forte\n- Concorrência nativa\n- Sintaxe simples e limpa\n- Cross-platform\n- Excelente para desenvolvimento de microserviços e APIs\n",
+        "metadata": {
+          "file_path": "documents/golang_intro.txt",
+          "file_size": "706",
+          "language": "portuguese"
+        },
+        "source": "golang_intro.txt",
+        "created": "2025-09-09T18:09:41Z"
+      },
+      "score": 0.73291856
+    },
+    {
+      "document": {
+        "id": "b030bb7a-8146-418f-b398-d98d0c893d1e",
+        "content": "RAG (Retrieval Augmented Generation) é uma técnica avançada de inteligência artificial que combina busca de informações com geração de texto.\n\nO conceito funciona em duas etapas principais:\n1. Retrieval (Recuperação): Busca documentos ou trechos de texto relevantes em uma base de conhecimento\n2. Generation (Geração): Usa um modelo de linguagem para gerar uma resposta baseada no contexto recuperado\n\nVantagens do RAG:\n- Reduz alucinações do modelo\n- Permite uso de conhecimento específico e atualizado\n- Não requer retreinamento do modelo\n- Transparência sobre as fontes de informação\n- Escalabilidade para grandes bases de conhecimento\n\nO RAG é especialmente útil para:\n- Sistemas de perguntas e respostas\n- Assistentes virtuais especializados\n- Chatbots corporativos\n- Análise de documentos\n- Suporte técnico automatizado\n",
+        "metadata": {
+          "file_path": "documents/rag_explanation.txt",
+          "file_size": "849",
+          "language": "portuguese"
+        },
+        "source": "rag_explanation.txt",
+        "created": "2025-09-09T18:09:41Z"
+      },
+      "score": 0.7289466
+    }
+  ],
+  "processing_time_ms": 1984
+}
