@@ -1,0 +1,28 @@
+meta {
+  name: Info da Coleção
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/api/v1/collection/info
+  body: none
+  auth: none
+}
+
+tests {
+  test("should return 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("should have collection info", function() {
+    expect(res.getBody()).to.have.property('result');
+    expect(res.getBody().result).to.have.property('points_count');
+  });
+  
+  test("should show points count", function() {
+    const pointsCount = res.getBody().result.points_count;
+    expect(pointsCount).to.be.a('number');
+    expect(pointsCount).to.be.at.least(0);
+  });
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Listar Todos Documentos
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/v1/documents?limit=50
+  body: none
+  auth: none
+}
+
+params:query {
+  limit: 50
+}
+
+tests {
+  test("should return 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("should have documents array", function() {
+    expect(res.getBody()).to.have.property('documents');
+    expect(res.getBody().documents).to.be.an('array');
+  });
+  
+  test("should have count", function() {
+    expect(res.getBody()).to.have.property('count');
+    expect(res.getBody().count).to.be.a('number');
+  });
+}

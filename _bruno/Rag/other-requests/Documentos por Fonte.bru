@@ -1,0 +1,38 @@
+meta {
+  name: Documentos por Fonte
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/api/v1/documents/source/golang_intro.txt?limit=20
+  body: none
+  auth: none
+}
+
+params:query {
+  limit: 20
+}
+
+tests {
+  test("should return 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("should have documents array", function() {
+    expect(res.getBody()).to.have.property('documents');
+    expect(res.getBody().documents).to.be.an('array');
+  });
+  
+  test("should have source field", function() {
+    expect(res.getBody()).to.have.property('source');
+    expect(res.getBody().source).to.equal('golang_intro.txt');
+  });
+  
+  test("documents should match source", function() {
+    const documents = res.getBody().documents;
+    documents.forEach(doc => {
+      expect(doc.source).to.equal('golang_intro.txt');
+    });
+  });
+}
