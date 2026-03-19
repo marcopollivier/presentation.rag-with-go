@@ -76,3 +76,4 @@ tmp/
 coverage.html
 coverage.xml
 .coverage/
+.claude/settings.local.json
